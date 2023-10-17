@@ -14,11 +14,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     # Let's nicely support folders in IDEs
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-
+    include(FetchContent)
     find_package(Eigen3 NO_MODULE)
     if (NOT TARGET Eigen3::Eigen)
 
-        include(FetchContent)
+        
         FetchContent_Declare(
         Eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
@@ -37,6 +37,21 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     endif (NOT TARGET Eigen3::Eigen)
 
+    # find python libraries
+    find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
+    find_package(PythonLibs 3.0 REQUIRED)
+    include_directories(${PYTHON3_INCLUDE_DIRS} ${NumPy_INCLUDE_DIRS})
+
+    FetchContent_Declare(
+        matplotlib
+        GIT_REPOSITORY https://github.com/lava/matplotlib-cpp.git
+        GIT_TAG master
+    )
+    FetchContent_GetProperties(matplotlib)
+    if(NOT matplotlib_POPULATED)
+        FetchContent_Populate(matplotlib)
+    endif()
+    include_directories(SYSTEM ${matplotlib_SOURCE_DIR})
 
     # Testing only available if this is the main app
     # Note this needs to be done in the main CMakeLists
