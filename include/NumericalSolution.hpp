@@ -1,6 +1,7 @@
 #ifndef NUMERICAL_SOLUTION_HPP
 #define NUMERICAL_SOLUTION_HPP
 
+#include <cmath>
 #include <Eigen/Sparse>
 
 template<int N>
@@ -104,9 +105,8 @@ public:
         }
     }
 
-    auto velocities() const{
-        std::vector<double> uvec(velocityVector.data(), velocityVector.data() + velocityVector.size());
-        return uvec;
+    Vector velocities() const{
+        return velocityVector;
     }
 
     ~NumericalSolution() = default;
