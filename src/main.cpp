@@ -60,17 +60,7 @@ int main(int, char**){
     Eigen::VectorXd differenceTime2 = analyticalVelocitiesTime2 - numericalVelocitiesTime2;
     Eigen::VectorXd differenceTime3 = analyticalVelocitiesTime3 - numericalVelocitiesTime3;
     Eigen::VectorXd differenceTime4 = analyticalVelocitiesTime4 - numericalVelocitiesTime4;
-/*
-    auto numericalTime1 = eigenToStandard(numericalVelocitiesTime1);
-    auto numericalTime2 = eigenToStandard(numericalVelocitiesTime2);
-    auto numericalTime3 = eigenToStandard(numericalVelocitiesTime3);
-    auto numericalTime4 = eigenToStandard(numericalVelocitiesTime4);
 
-    auto analyticalTime1 = eigenToStandard(analyticalVelocitiesTime1);
-    auto analyticalTime2 = eigenToStandard(analyticalVelocitiesTime2);
-    auto analyticalTime3 = eigenToStandard(analyticalVelocitiesTime3);
-    auto analyticalTime4 = eigenToStandard(analyticalVelocitiesTime4);
-*/
     plt::named_plot("time = 0.025 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime1), heights,"b-");
     plt::named_plot("time = 0.025 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime1), heights, "bx");
     plt::named_plot("time = 0.05 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime2), heights, "r-");
