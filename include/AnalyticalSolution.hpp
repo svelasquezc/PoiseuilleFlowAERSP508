@@ -6,28 +6,39 @@
 #include <map>
 #include <cmath>
 
-template<int N, int height, int pressureGradient, int density, int kinematicViscosity>
+
+constexpr auto pi = std::atan(1)*4;
+constexpr auto pi2 = std::pow(pi,2);
+
+
+template<int N>
 class AnalyticalSolution {
 
 private:
 
     using Vector = Eigen::VectorXd;
-    constexpr double pi = std::atan(1)*4;
-    constexpr double pi2 = std::pow(pi,2);
     std::map<unsigned int, double> fourierCoefficients;
     Vector heightDistribution;
     Vector steadyStateVelocity;
+    double height;
+    double pressureGradient;
+    double density;
+    double kinematicViscosity;
 
-    inline Vector steadyStateSolution(){
+
+    Vector steadyStateSolution(){
+        Vector ones;
+        ones.resize(N);
+        ones.array() = 1.0;
         return (-pressureGradient*
-        (h/2*density*kinematicViscosity)*heightDistribution)*
-        (1-(1/height)*heightDistribution);
+        (height/(2*density*kinematicViscosity)
+        )*heightDistribution).cwiseProduct(ones - (1/height)*heightDistribution);
     }
 
     Vector transientVelocity(const double& time){
         Vector transient;
-        transient.resize(heightDistribution.size())
-        unsigned int i = 0
+        transient.resize(heightDistribution.size());
+        unsigned int i = 0;
         for (const auto& heightValue : heightDistribution ){
             double summation = 0;
             for (const auto& [n, Bn] : fourierCoefficients){
@@ -55,8 +66,14 @@ private:
 
 public:
 
-    AnalyticalSolution(const std::vector<double>& heights){
-        heightDistribution = Vector(heights.data());
+    AnalyticalSolution(std::vector<double>& heights, double _height, double _pressureGradient, double _density, double _kinematicViscosity){
+
+        height = _height;
+        pressureGradient = _pressureGradient;
+        density = _density;
+        kinematicViscosity = _kinematicViscosity;
+
+        heightDistribution = Eigen::Map<Vector>(heights.data(), heights.size());;
         calculateCoefficients();
         steadyStateVelocity = steadyStateSolution();
     }

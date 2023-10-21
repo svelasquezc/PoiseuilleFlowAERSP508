@@ -27,7 +27,7 @@ private:
     const int maxNonZeros = 3*N-4;
 
     mutable double lambda = 0;
-    double time;
+    double time=0;
 
     Solver solver;
 
@@ -105,8 +105,12 @@ public:
         }
     }
 
-    Vector velocities() const{
+    auto velocities() const{
         return velocityVector;
+        /*
+        std::vector<double> uvec(velocityVector.data(), velocityVector.data() + velocityVector.size());
+        return uvec;
+        */
     }
 
     ~NumericalSolution() = default;

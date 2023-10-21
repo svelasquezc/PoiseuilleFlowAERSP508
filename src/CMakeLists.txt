@@ -14,6 +14,8 @@ target_link_libraries(PoiseuilleFlow
         Python3::NumPy
 )
 
+target_compile_features(PoiseuilleFlow PRIVATE cxx_std_17)
+
 # IDEs should put the headers in a nice place
 source_group(
   TREE "${PROJECT_SOURCE_DIR}/include"

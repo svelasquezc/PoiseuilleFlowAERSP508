@@ -3,15 +3,15 @@
 #include <vector>
 #include <algorithm>
 
-#include <NumericalSolution.hpp>
 #include <AnalyticalSolution.hpp>
+#include <NumericalSolution.hpp>
 
 #include "matplotlibcpp.h"
 
 
 namespace plt = matplotlibcpp;
 
-auto eigenToStandard(auto vec){
+auto eigenToStandard(Eigen::VectorXd& vec){
     std::vector<double> uvec(vec.data(), vec.data() + vec.size());
     return uvec;
 }
@@ -19,49 +19,79 @@ auto eigenToStandard(auto vec){
 
 int main(int, char**){
 
-    constexpr int pressureGradient = -8;
-    constexpr int kinematicViscosity = 1;
-    constexpr int density = 1;
-    constexpr int height = 1;
+    double pressureGradient = -8;
+    double kinematicViscosity = 1;
+    double density = 1;
+    double height = 1;
     constexpr int N = 101;
-    constexpr double deltaY = height/(N-1);
+    double deltaY = height/(N-1);
+
+    
+
+    NumericalSolution<N> numericalPoiseuille(
+        pressureGradient,
+        kinematicViscosity,
+        density,
+        height
+        );
+
+    double time1 = 0.025, time2 = 0.05, time3=0.1, time4=0.4;
+    
+    numericalPoiseuille.simulate(time1);
+    auto numericalVelocitiesTime1 = numericalPoiseuille.velocities();
+    numericalPoiseuille.simulate(time2);
+    auto numericalVelocitiesTime2 = numericalPoiseuille.velocities();
+    numericalPoiseuille.simulate(time3);
+    auto numericalVelocitiesTime3 = numericalPoiseuille.velocities();
+    numericalPoiseuille.simulate(time4);
+    auto numericalVelocitiesTime4 = numericalPoiseuille.velocities();
 
     auto heights = std::vector<double>(N);
     std::generate(heights.begin(), heights.end(), [n = 0, &deltaY]() mutable { return n++ * deltaY; });
 
-    AnalyticalSolution<N,height,pressureGradient,density,kinematicViscosity> analyticalPoiseuille(heights);
-    NumericalSolution<N> numericalPoiseuille(pressureGradient, kinematicViscosity, density, height);
+    AnalyticalSolution<N> analyticalPoiseuille(heights, height, pressureGradient, density, kinematicViscosity);
 
-    double time1 = 0.025, time2 = 0.05, time3=0.1, time4=0.4;
-    
-    auto analyticaVelocitiesTime1 = analyticalPoiseuille.calculate(time1);
-    numericalPoiseuille.simulate(time1);
-    auto numericalVelocitiesTime1 = numericalPoiseuille.velocities();
+    auto analyticalVelocitiesTime1 = analyticalPoiseuille.calculate(time1);
+    auto analyticalVelocitiesTime2 = analyticalPoiseuille.calculate(time2);
+    auto analyticalVelocitiesTime3 = analyticalPoiseuille.calculate(time3);
+    auto analyticalVelocitiesTime4 = analyticalPoiseuille.calculate(time4);
 
-    auto analyticaVelocitiesTime2 = analyticalPoiseuille.calculate(time2);
-    numericalPoiseuille.simulate(time2);
-    auto numericalVelocitiesTime2 = numericalPoiseuille.velocities();
+    Eigen::VectorXd differenceTime1 = analyticalVelocitiesTime1 - numericalVelocitiesTime1; 
+    Eigen::VectorXd differenceTime2 = analyticalVelocitiesTime2 - numericalVelocitiesTime2;
+    Eigen::VectorXd differenceTime3 = analyticalVelocitiesTime3 - numericalVelocitiesTime3;
+    Eigen::VectorXd differenceTime4 = analyticalVelocitiesTime4 - numericalVelocitiesTime4;
+/*
+    auto numericalTime1 = eigenToStandard(numericalVelocitiesTime1);
+    auto numericalTime2 = eigenToStandard(numericalVelocitiesTime2);
+    auto numericalTime3 = eigenToStandard(numericalVelocitiesTime3);
+    auto numericalTime4 = eigenToStandard(numericalVelocitiesTime4);
 
-    auto analyticaVelocitiesTime3 = analyticalPoiseuille.calculate(time3);
-    numericalPoiseuille.simulate(time3);
-    auto numericalVelocitiesTime3 = numericalPoiseuille.velocities();
-
-    auto analyticaVelocitiesTime4 = analyticalPoiseuille.calculate(time4);
-    numericalPoiseuille.simulate(time4);
-    auto numericalVelocitiesTime4 = numericalPoiseuille.velocities();
-
-    auto differenceTime1 = analyticaVelocitiesTime1 - numericalVelocitiesTime1; 
-    auto differenceTime2 = analyticaVelocitiesTime2 - numericalVelocitiesTime2;
-    auto differenceTime3 = analyticaVelocitiesTime3 - numericalVelocitiesTime3;
-    auto differenceTime4 = analyticaVelocitiesTime4 - numericalVelocitiesTime4;
-
+    auto analyticalTime1 = eigenToStandard(analyticalVelocitiesTime1);
+    auto analyticalTime2 = eigenToStandard(analyticalVelocitiesTime2);
+    auto analyticalTime3 = eigenToStandard(analyticalVelocitiesTime3);
+    auto analyticalTime4 = eigenToStandard(analyticalVelocitiesTime4);
+*/
     plt::named_plot("time = 0.025 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime1), heights);
+    plt::named_plot("time = 0.025 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime1), heights);
     plt::named_plot("time = 0.05 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime2), heights);
+    plt::named_plot("time = 0.05 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime2), heights);
     plt::named_plot("time = 0.1 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime3), heights);
+    plt::named_plot("time = 0.1 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime3), heights);
     plt::named_plot("time = 0.4 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime4), heights);
+    plt::named_plot("time = 0.4 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime4), heights);
     
     plt::title("Poiseuille flow Analytical vs Numerical Solution");
     plt::legend();
+    plt::save("./Comparison.pdf");
+    plt::show();
+
+    plt::named_plot("time = 0.025 (Difference)", eigenToStandard(differenceTime1), heights);
+    plt::named_plot("time = 0.05 (Difference)", eigenToStandard(differenceTime2), heights);
+    plt::named_plot("time = 0.1 (Difference)", eigenToStandard(differenceTime3), heights);
+    plt::named_plot("time = 0.4 (Difference)", eigenToStandard(differenceTime4), heights);
+    plt::title("Poiseuille flow Difference");
+    plt::legend();
+    plt::save("./Difference.pdf");
     plt::show();
 
     return 0;
