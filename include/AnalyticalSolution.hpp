@@ -7,8 +7,7 @@
 #include <cmath>
 
 
-constexpr auto pi = std::atan(1)*4;
-constexpr auto pi2 = std::pow(pi,2);
+constexpr double pi = 3.14159265358979323846;
 
 
 template<int N>
@@ -43,7 +42,7 @@ private:
             double summation = 0;
             for (const auto& [n, Bn] : fourierCoefficients){
                 summation += Bn*std::exp(
-                    -std::pow(n,2)*pi2*kinematicViscosity*time/std::pow(height,2)
+                    -std::pow(n,2)*std::pow(pi,2)*kinematicViscosity*time/std::pow(height,2)
                     )*std::sin(n*pi*heightValue/height);
             }
             transient[i] = summation;
@@ -55,10 +54,10 @@ private:
     void calculateCoefficients(){
         unsigned int n = 1;
         while(true){
-            fourierCoefficients[n] = -4*height*pressureGradient/
-            (std::pow(n,2)*pi2*density*kinematicViscosity);
+            fourierCoefficients[n] = 4*std::pow(height,2)*pressureGradient/
+            (std::pow(n,3)*std::pow(pi,3)*density*kinematicViscosity);
             if (n>1){
-                if (fourierCoefficients[n] - fourierCoefficients[n-2] < 1e-8) break;
+                if (fourierCoefficients[n] - fourierCoefficients[n-2] < 1e-9) break;
             }
             n+=2;
         }
@@ -73,9 +72,10 @@ public:
         density = _density;
         kinematicViscosity = _kinematicViscosity;
 
-        heightDistribution = Eigen::Map<Vector>(heights.data(), heights.size());;
-        calculateCoefficients();
+        heightDistribution = Eigen::Map<Vector>(heights.data(), heights.size());
+
         steadyStateVelocity = steadyStateSolution();
+        calculateCoefficients();
     }
 
     Vector calculate(const double& time){

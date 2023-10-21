@@ -71,14 +71,14 @@ int main(int, char**){
     auto analyticalTime3 = eigenToStandard(analyticalVelocitiesTime3);
     auto analyticalTime4 = eigenToStandard(analyticalVelocitiesTime4);
 */
-    plt::named_plot("time = 0.025 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime1), heights);
-    plt::named_plot("time = 0.025 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime1), heights);
-    plt::named_plot("time = 0.05 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime2), heights);
-    plt::named_plot("time = 0.05 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime2), heights);
-    plt::named_plot("time = 0.1 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime3), heights);
-    plt::named_plot("time = 0.1 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime3), heights);
-    plt::named_plot("time = 0.4 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime4), heights);
-    plt::named_plot("time = 0.4 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime4), heights);
+    plt::named_plot("time = 0.025 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime1), heights, "bo");
+    plt::named_plot("time = 0.025 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime1), heights,"b-");
+    plt::named_plot("time = 0.05 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime2), heights, "ro");
+    plt::named_plot("time = 0.05 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime2), heights, "r-");
+    plt::named_plot("time = 0.1 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime3), heights, "go");
+    plt::named_plot("time = 0.1 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime3), heights, "g-");
+    plt::named_plot("time = 0.4 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime4), heights, "yo");
+    plt::named_plot("time = 0.4 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime4), heights, "y-");
     
     plt::title("Poiseuille flow Analytical vs Numerical Solution");
     plt::legend();

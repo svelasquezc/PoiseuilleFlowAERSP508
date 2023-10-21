@@ -107,10 +107,6 @@ public:
 
     auto velocities() const{
         return velocityVector;
-        /*
-        std::vector<double> uvec(velocityVector.data(), velocityVector.data() + velocityVector.size());
-        return uvec;
-        */
     }
 
     ~NumericalSolution() = default;
