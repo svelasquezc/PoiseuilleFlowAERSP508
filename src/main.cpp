@@ -61,14 +61,14 @@ int main(int, char**){
     Eigen::VectorXd differenceTime3 = analyticalVelocitiesTime3 - numericalVelocitiesTime3;
     Eigen::VectorXd differenceTime4 = analyticalVelocitiesTime4 - numericalVelocitiesTime4;
 
-    plt::named_plot("time = 0.025 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime1), heights,"b-");
-    plt::named_plot("time = 0.025 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime1), heights, "bx");
-    plt::named_plot("time = 0.05 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime2), heights, "r-");
-    plt::named_plot("time = 0.05 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime2), heights, "rx");
-    plt::named_plot("time = 0.1 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime3), heights, "g-");
-    plt::named_plot("time = 0.1 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime3), heights, "gx");
-    plt::named_plot("time = 0.4 (Analytical Solution)", eigenToStandard(analyticalVelocitiesTime4), heights, "y-");
-    plt::named_plot("time = 0.4 (Numerical Solution)", eigenToStandard(numericalVelocitiesTime4), heights, "yx");
+    plt::named_plot("Analytical, time = 0.025", eigenToStandard(analyticalVelocitiesTime1), heights,"b-");
+    plt::named_plot("Numerical, time = 0.025", eigenToStandard(numericalVelocitiesTime1), heights, "bx");
+    plt::named_plot("Analytical, time = 0.05", eigenToStandard(analyticalVelocitiesTime2), heights, "r-");
+    plt::named_plot("Numerical, time = 0.05", eigenToStandard(numericalVelocitiesTime2), heights, "rx");
+    plt::named_plot("Analytical, time = 0.1", eigenToStandard(analyticalVelocitiesTime3), heights, "g-");
+    plt::named_plot("Numerical, time = 0.1", eigenToStandard(numericalVelocitiesTime3), heights, "gx");
+    plt::named_plot("Analytical, time = 0.4", eigenToStandard(analyticalVelocitiesTime4), heights, "y-");
+    plt::named_plot("Numerical, time = 0.4", eigenToStandard(numericalVelocitiesTime4), heights, "yx");
     
     plt::title("Poiseuille flow Analytical vs Numerical Solution");
     plt::xlabel("Velocity");
@@ -77,10 +77,10 @@ int main(int, char**){
     plt::save("./Comparison.pdf");
     plt::show();
 
-    plt::named_plot("time = 0.025 (Error)", eigenToStandard(differenceTime1), heights);
-    plt::named_plot("time = 0.05 (Error)", eigenToStandard(differenceTime2), heights);
-    plt::named_plot("time = 0.1 (Error)", eigenToStandard(differenceTime3), heights);
-    plt::named_plot("time = 0.4 (Error)", eigenToStandard(differenceTime4), heights);
+    plt::named_plot("time = 0.025", eigenToStandard(differenceTime1), heights);
+    plt::named_plot("time = 0.05", eigenToStandard(differenceTime2), heights);
+    plt::named_plot("time = 0.1", eigenToStandard(differenceTime3), heights);
+    plt::named_plot("time = 0.4", eigenToStandard(differenceTime4), heights);
     plt::xlabel("Error (Diference) in Velocity");
     plt::ylabel("Height");
     plt::title("Poiseuille flow Difference Error (Analytical - Numerical)");
