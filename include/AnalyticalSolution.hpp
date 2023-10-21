@@ -57,7 +57,7 @@ private:
             fourierCoefficients[n] = 4*std::pow(height,2)*pressureGradient/
             (std::pow(n,3)*std::pow(pi,3)*density*kinematicViscosity);
             if (n>1){
-                if (fourierCoefficients[n] - fourierCoefficients[n-2] < 1e-8) break;
+                if (std::abs(fourierCoefficients[n] - fourierCoefficients[n-2]) < 1e-8) break;
             }
             n+=2;
         }
