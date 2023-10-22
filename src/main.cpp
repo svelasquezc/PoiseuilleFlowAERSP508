@@ -81,9 +81,9 @@ int main(int, char**){
     plt::named_plot("time = 0.05", eigenToStandard(differenceTime2), heights);
     plt::named_plot("time = 0.1", eigenToStandard(differenceTime3), heights);
     plt::named_plot("time = 0.4", eigenToStandard(differenceTime4), heights);
-    plt::xlabel("Error (Diference) in Velocity");
+    plt::xlabel("Absolute Error in Velocity");
     plt::ylabel("Height");
-    plt::title("Poiseuille flow Difference Error (Analytical - Numerical)");
+    plt::title("Poiseuille flow Absolute Error (Analytical - Numerical)");
     plt::legend();
     plt::save("./Difference.pdf");
     plt::show();
